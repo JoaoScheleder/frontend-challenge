@@ -3,7 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Message({ message, is_mine = false }: Readonly<{ message: string, is_mine: boolean }>) {
     return (
-        <div className={"flex gap-8 mb-2 max-w-[60%] p-4" + (is_mine ? ' float-right' : '')}>
+        <div className={"flex gap-4 mb-2 max-w-[60%]" + (is_mine ? ' float-right' : '')}>
+            <div className={"flex gap-8 bg-zinc-700/50 px-8 py-6 rounded-2xl mb-2" + (is_mine ? ' float-right bg-blue-700' : '')}>
             {is_mine ?
                 <Avatar className="w-16 h-16 mt-8">
                     <AvatarImage src="https://github.com/shadcn.png" />
@@ -14,7 +15,6 @@ export default function Message({ message, is_mine = false }: Readonly<{ message
                     <RocketIcon className="w-16 h-16 p-4"></RocketIcon>
                 </div>
             }
-            <div className={"flex gap-8 bg-zinc-700/50 px-8 py-6 rounded-2xl" + (is_mine ? ' float-right bg-blue-700' : '')}>
 
                 <div className="flex flex-col">
                     {/* <div className="flex gap-4"> */}
