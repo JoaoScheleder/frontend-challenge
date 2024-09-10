@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Footer() {
     return (
@@ -28,13 +29,22 @@ export default function Footer() {
                     <ExitIcon></ExitIcon>
                     <p>Sair</p>
                 </div>
-                <div className="bg-orange-600 w-full rounded mt-4 p-4 flex items-center cursor-pointer hover:bg-orange-500 transition">
-                    <div>
+                <motion.div
+                    className="bg-orange-600 w-full rounded mt-4 p-4 flex justify-between items-center cursor-pointer hover:bg-orange-500 transition"
+                    whileHover="hover"
+                >                    <div>
                         <p className="text-xs text-orange-200">Aproveite mais</p>
-                        <p className="text-orange-100">Atualize para o <span className="font-bold">Premium</span></p>
+                        <p className="text-orange-100">Atualize para o <br></br><span className="font-bold">Premium</span></p>
                     </div>
-                        <ArrowRight ></ArrowRight>
-                </div>
+                    <motion.div
+                        variants={{
+                            hover: { x: [0, 10, 0] }
+                        }}
+                        transition={{ repeat: Infinity, duration: 1, ease: "easeOut" }}
+                    >
+                        <ArrowRight />
+                    </motion.div>
+                </motion.div>
             </div>
         </footer>
     )
