@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import useTranslation from "@/hooks/useTranslation";
+import LanguageSelector from "./languageSelector";
 
 export default function Footer() {
     const {t} = useTranslation()
@@ -17,19 +18,22 @@ export default function Footer() {
                 </Avatar>
                 <div>
                     <p className="text-sm font-bold dark:text-white text-black">João Gabriel Scheleder</p>
-                    <p className="text-xs dark:text-neutral-400 text-neutral-700">Desenvolvedor</p>
+                    <p className="text-xs dark:text-neutral-400 text-neutral-700">{t('developer')}</p>
                 </div>
             </div>
             <div className="w-full flex flex-col gap-1">
                 {/* links like logout settings dark mode */}
+
+                
                 <div className="flex gap-2 items-center text-sm dark:text-zinc-300 text-zinc-700 cursor-pointer px-4 py-2 rounded text-left hover:bg-zinc-800 transition">
                     <GearIcon></GearIcon>
-                    <p>Configurações</p>
+                    <p>{t('settings')}</p>
                 </div>
                 <div className="flex gap-2 items-center text-sm dark:text-zinc-300 text-zinc-700 cursor-pointer px-4 py-2 rounded text-left hover:bg-zinc-800 transition">
                     <ExitIcon></ExitIcon>
-                    <p>Sair</p>
+                    <p>{t('exit')}</p>
                 </div>
+                <LanguageSelector></LanguageSelector>
                 <motion.div
                     className="bg-blue-700 w-full rounded mt-4 p-4 flex justify-between items-center cursor-pointer hover:bg-blue-600 transition"
                     whileHover="hover"
@@ -46,6 +50,7 @@ export default function Footer() {
                         <ArrowRight />
                     </motion.div>
                 </motion.div>
+
             </div>
         </footer>
     )

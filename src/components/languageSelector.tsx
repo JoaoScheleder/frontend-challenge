@@ -16,7 +16,7 @@ const LanguageSelector = () => {
 
   return (
     <Select value={value} onValueChange={(value)=>handleChange(value)}>
-    <SelectTrigger className="w-[148px]">
+    <SelectTrigger className="x dark:text-zinc-100 text-zinc-800">
       <SelectValue placeholder="Languages" />
     </SelectTrigger>
     <SelectContent className="flex items-center">

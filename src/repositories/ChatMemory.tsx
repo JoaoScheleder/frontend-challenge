@@ -1,13 +1,15 @@
-import ChatHistoryRepository, { Chat } from "./ChatHistoryRepository";
+import ChatRepository, { Messages } from "./ChatRepository";
+import ChatHistoryRepository, { Chat } from "./ChatRepository";
 
-class ChatHistoryMemory implements ChatHistoryRepository{
+class ChatMemory implements ChatRepository{
     
     private chatHistories: Chat[] = [];
 
-    create(chatHistory: Chat): void {
+    create(chatHistory: Chat): number {
         chatHistory.id = this.findMaxId() + 1;
         chatHistory.name += ' ' + chatHistory.id;
         this.chatHistories.push(chatHistory);
+        return chatHistory.id
     }
 
     delete(id: number): void {
@@ -16,6 +18,14 @@ class ChatHistoryMemory implements ChatHistoryRepository{
     
     findAll(): Chat[] | null {
         return this.chatHistories;
+    }
+
+    findById(id: number): Chat | null {
+        return this.chatHistories.find(chatHistory => chatHistory.id === id) || null;
+    }
+
+    update(chatHistory: Chat): void {
+        this.chatHistories = this.chatHistories.map(ch => ch.id === chatHistory.id ? chatHistory : ch);
     }
 
     private findMaxId(): number{
@@ -29,5 +39,5 @@ class ChatHistoryMemory implements ChatHistoryRepository{
     }
 }
 
-const chatHistoryMemory = new ChatHistoryMemory();
-export default chatHistoryMemory;
+const chatMemory = new ChatMemory();
+export default chatMemory;
