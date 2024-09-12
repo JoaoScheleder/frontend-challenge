@@ -1,6 +1,6 @@
 import ChatMessagesRepository, { ChatMessage } from "./ChatMessagesRepository";
 
-export default class ChatMessagesMemory implements ChatMessagesRepository{
+class ChatMessagesMemory implements ChatMessagesRepository{
     
     private chatMessages: ChatMessage[] = [];
 
@@ -16,3 +16,6 @@ export default class ChatMessagesMemory implements ChatMessagesRepository{
         return this.chatMessages;
     }
 }
+
+const chatMessagesMemory = new ChatMessagesMemory();
+export default chatMessagesMemory

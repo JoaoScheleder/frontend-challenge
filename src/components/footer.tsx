@@ -1,12 +1,11 @@
-import { ExitIcon, GearIcon, MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { ExitIcon, GearIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTheme } from "@/context/themecontext";
+import useTranslation from "@/hooks/useTranslation";
 
 export default function Footer() {
+    const {t} = useTranslation()
 
     return (
         <footer className="flex justify-between items-center p-4 flex-col gap-6 ">
@@ -35,8 +34,8 @@ export default function Footer() {
                     className="bg-blue-700 w-full rounded mt-4 p-4 flex justify-between items-center cursor-pointer hover:bg-blue-600 transition"
                     whileHover="hover"
                 >                    <div>
-                        <p className="text-xs text-blue-200">Aproveite mais</p>
-                        <p className="text-blue-100">Atualize para o <br></br><span className="font-bold">Premium</span></p>
+                        <p className="text-xs text-blue-200">{t('do_more')}</p>
+                        <p className="text-blue-100">{t('upgrade_to_premium')}<br></br><span className="font-bold">Premium</span></p>
                     </div>
                     <motion.div
                         variants={{

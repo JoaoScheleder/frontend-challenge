@@ -1,12 +1,12 @@
 
-export interface ChatHistory{
-    id: number;
-    message: string;
+export interface Chat{
+    id?: number;
+    name: string;
     createdAt: Date;
 }
 
 export default interface ChatHistoryRepository{
-    create(chatHistory : ChatHistory) : void;
-    findAll(chatHistory : ChatHistory) : ChatHistory[] | null;
+    create(chatHistory : Chat) : void;
+    findAll(chatHistory : Chat) : Chat[] | null;
     delete(id: number) : void;
 }

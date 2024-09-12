@@ -4,14 +4,23 @@ import ChatHistory from "@/components/chathistory";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Input from "@/components/input";
+import LanguageSelector from "@/components/languageSelector";
 import Message from "@/components/message";
 import { Robocat } from "@/components/robocat";
 import { useTheme } from "@/context/themecontext";
+import useTranslation from "@/hooks/useTranslation";
 import useScreenSize from "@/hooks/useWidth";
 import useWidth from "@/hooks/useWidth";
-import { Cross1Icon, EnterFullScreenIcon, ExitFullScreenIcon, HamburgerMenuIcon, MoonIcon, PaperPlaneIcon, SunIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, EnterFullScreenIcon, ExitFullScreenIcon, HamburgerMenuIcon, MoonIcon, PaperPlaneIcon, SpeakerLoudIcon, SunIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 export default function Home() {
   const [open, setOpen] = useState(true);
@@ -24,6 +33,7 @@ export default function Home() {
 
   const { theme, toggleTheme } = useTheme();
   const {width, height} = useScreenSize();
+  const {t} = useTranslation();
 
 
   useEffect(() => {
@@ -41,29 +51,48 @@ export default function Home() {
 
   const handleKeyPress = (event : any) => {
     if (event.key === 'Enter') {
-      sendMessage();
+      sendMessage(text);
     }
   };
 
+  const [isRecording, setIsRecording] = useState(false);
 
-  const sendMessage = () => {
-    if (text.trim() !== '') {
+  const startSpeechRecognition = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+    recognition.start();
+    recognition.onresult = (event: { results: { transcript: any; }[][]; }) => {
+      const speechToText = event.results[0][0].transcript;
+      console.log(speechToText);
+      setText(speechToText);
+      setIsRecording(false);
+      sendMessage(speechToText); // Pass the recognized text directly to sendMessage
+    };
+  };
+
+
+  const sendMessage = (message: string) => {
+    if (message && message.trim() !== '') {
       setMessages((previous) => {
         return [...previous, {
           is_mine: true,
-          message: text
-        }]
-      })
+          message: message
+        }];
+      });
       const response = {
         is_mine: false,
         message: 'Olá, tudo bem?'
-      }
-      setMessages((previous) => {
-        return [...previous, response]
-      })
-      setText('')
+      };
+      setMessages((previous) => [...previous, response]);
+      setText('');
     }
-  }
+  };
 
   const toggleSidebar = () => {
     setOpen(!open);
@@ -122,6 +151,7 @@ export default function Home() {
             {theme === 'dark' ?
               <MoonIcon className="dark:text-zinc-100 text-zinc-700 cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-100 h-10 w-10 rounded-full p-2 transition mb-2" onClick={toggleTheme} /> :
               <SunIcon className="dark:text-zinc-100 text-zinc-700 cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-100 h-10 w-10 rounded-full p-2 transition mb-2" onClick={toggleTheme} />}
+            <LanguageSelector></LanguageSelector>
           </div>
         </div>
         <div className="overflow-auto flex-grow">
@@ -147,7 +177,7 @@ export default function Home() {
         >
           <Robocat className="w-72 h-72" />
           <p className="dark:text-white text-black text-sm p-4 rounded-2xl text-center dark:bg-green-600 bg-green-100">
-            Oii, sou o Astro Cat, como posso te ajudar?
+            {t('welcome_message')}
           </p>
         </motion.div>
       )}
@@ -164,7 +194,10 @@ export default function Home() {
         <div className="flex gap-1 items-center">
           <Input onChange={setText} onKeyPress={handleKeyPress} placeholder="Mande sua mensagem..." value={text} type="text"></Input>
           <button >
-            <PaperPlaneIcon onClick={sendMessage} className="dark:text-zinc-100 text-zinc-700 cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-100 h-10 w-10 rounded-full p-2 transition mb-2"></PaperPlaneIcon>
+            <PaperPlaneIcon onClick={()=>sendMessage(text)} className="dark:text-zinc-100 text-zinc-700 cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-100 h-10 w-10 rounded-full p-2 transition mb-2"></PaperPlaneIcon>
+          </button>
+          <button>
+            <SpeakerLoudIcon onClick={startSpeechRecognition} className={"dark:text-zinc-100 text-zinc-700 cursor-pointer dark:hover:bg-zinc-700 hover:bg-zinc-100 h-10 w-10 rounded-full p-2 transition mb-2" + (isRecording ? ' bg-red-500 hover:bg-red-700' : '')}></SpeakerLoudIcon>
           </button>
         </div>
       </div>

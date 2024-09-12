@@ -1,10 +1,12 @@
-import ChatHistoryRepository, { ChatHistory } from "./ChatHistoryRepository";
+import ChatHistoryRepository, { Chat } from "./ChatHistoryRepository";
 
-export default class ChatHistoryMemory implements ChatHistoryRepository{
+class ChatHistoryMemory implements ChatHistoryRepository{
     
-    private chatHistories: ChatHistory[] = [];
+    private chatHistories: Chat[] = [];
 
-    create(chatHistory: ChatHistory): void {
+    create(chatHistory: Chat): void {
+        chatHistory.id = this.findMaxId() + 1;
+        chatHistory.name += ' ' + chatHistory.id;
         this.chatHistories.push(chatHistory);
     }
 
@@ -12,7 +14,20 @@ export default class ChatHistoryMemory implements ChatHistoryRepository{
         this.chatHistories = this.chatHistories.filter(chatHistory => chatHistory.id !== id);
     }
     
-    findAll(): ChatHistory[] | null {
+    findAll(): Chat[] | null {
         return this.chatHistories;
     }
+
+    private findMaxId(): number{
+        let maxId = 0;
+        this.chatHistories.forEach(chatHistory => {
+            if(chatHistory.id && chatHistory.id > maxId){
+                maxId = chatHistory.id;
+            }
+        });
+        return maxId;
+    }
 }
+
+const chatHistoryMemory = new ChatHistoryMemory();
+export default chatHistoryMemory;
