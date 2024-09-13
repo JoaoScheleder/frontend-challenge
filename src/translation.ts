@@ -1,3 +1,4 @@
+import { send } from "process";
 
 const translations: { [key: string]: { [key: string]: string } } = {
     en: {
@@ -9,6 +10,7 @@ const translations: { [key: string]: { [key: string]: string } } = {
       exit: "Exit",
       settings: "Settings",
       developer: "Developer",
+      send_your_message: "Send your message...",
     },
     pt: {
       welcome_message: "Oii, sou o Astro Cat, como posso te ajudar?",
@@ -19,6 +21,7 @@ const translations: { [key: string]: { [key: string]: string } } = {
       exit: "Sair",
       settings: "Configurações",
       developer: "Desenvolvedor",
+      send_your_message: "Envie sua mensagem...",
     },
   };
   
