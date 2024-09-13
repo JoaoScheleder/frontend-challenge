@@ -15,7 +15,7 @@ export default function Message({ message, is_mine = false }: Readonly<{ message
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
         >
-            <div className={"flex gap-4 bg-zinc-700/50 px-8 py-6 rounded-2xl mb-2" + (is_mine ? ' dark:bg-blue-700 bg-blue-500' : '')}>
+            <div className={"flex gap-4 px-8 py-6 rounded-2xl mb-2" + (is_mine ? ' dark:bg-blue-700 bg-blue-500' : ' bg-zinc-700/50')}>
                 {is_mine ?
                     <Avatar className="w-12 h-12 mt-4">
                         <AvatarImage src="https://github.com/shadcn.png" />

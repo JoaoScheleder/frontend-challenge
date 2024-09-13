@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased` + ' bg-zinc-900'}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased` + ' bg-zinc-900 '}>
       <ThemeProviderClient>
           <ClientTheme>
             {children}
