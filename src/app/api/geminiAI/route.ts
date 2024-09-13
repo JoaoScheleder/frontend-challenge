@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from 'next/server';
 
-const API_KEY = 'YOUR_API_KEY';
+const API_KEY = process.env.GOOGLE_API_KEY!;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 const sendMessage = async function* (prompt: string) {
