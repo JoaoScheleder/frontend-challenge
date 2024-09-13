@@ -1,0 +1,171 @@
+/* STYLE FOR REACT MARKDOWN NEED TO STYLE ALL MARKDOWN QUOTES */
+/* STYLE FOR REACT MARKDOWN NEED TO STYLE ALL MARKDOWN QUOTES */
+
+
+.reactmarkdown h1{
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown h2{
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+
+.reactmarkdown h3{
+    font-size: 1.17rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown h4{
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown h5{
+    font-size: 0.83rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown h6{
+    font-size: 0.67rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+
+.reactmarkdown p{
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 16px;
+    
+}
+
+.reactmarkdown blockquote{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+    background: #f9f9f9;
+    padding: 1rem;
+    border-left: 5px solid #333;
+}
+
+.reactmarkdown ul{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    list-style: disc;
+}
+
+.reactmarkdown ol{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    list-style: auto;
+}
+
+.reactmarkdown li{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown a{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown img{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown code{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown pre{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown table{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown tr{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown th{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown td{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown hr{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown strong{
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown em{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+.reactmarkdown del{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem 0;
+    
+}
+
+
+
+

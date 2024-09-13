@@ -3,20 +3,12 @@
 import ChatList from "@/components/chatList";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import Input from "@/components/input";
 import InteractiveChat from "@/components/InteractiveChat";
-import LanguageSelector from "@/components/languageSelector";
-import Message from "@/components/message";
-import { Robocat } from "@/components/robocat";
-import { useTheme } from "@/context/themecontext";
-import useTranslation from "@/hooks/useTranslation";
 import useScreenSize from "@/hooks/useWidth";
-import useWidth from "@/hooks/useWidth";
 import chatMemory from "@/repositories/ChatMemory";
-import { Chat, Messages } from "@/repositories/ChatRepository";
-import { Cross1Icon, EnterFullScreenIcon, ExitFullScreenIcon, HamburgerMenuIcon, MoonIcon, PaperPlaneIcon, SpeakerLoudIcon, SunIcon } from "@radix-ui/react-icons";
+import { Chat } from "@/repositories/ChatRepository";
 import { motion } from "framer-motion";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -33,9 +25,9 @@ export default function Home() {
     name: 'Chat',
     messages: []
 });
-const setChatAndMessages = (chat: Chat) => {
-  setCurrentChat(chatMemory.findById(chat.id!)!);
-}
+  const setChatAndMessages = (chat: Chat) => {
+    setCurrentChat(chat);
+  }
 
   const toggleSidebar = () => {
     setOpen(!open);
@@ -46,6 +38,24 @@ const setChatAndMessages = (chat: Chat) => {
       setOpen(false);
     }
   }, [width]);
+
+    useEffect(()=>{
+      // if (!currentChat?.id) {
+      //     console.log("aqui")
+      //     const id = chatMemory.create({
+      //         name: 'Novo Chat',
+      //         messages: []
+      //     });
+      //     const newChat = chatMemory.findById(id)!;
+      //     setCurrentChat(newChat);
+      //     return
+      // }
+      // setCurrentChat(chatMemory.findById(currentChat.id)!)
+      // console.log(chatMemory, currentChat)
+
+  },[])
+
+
 
   return (
     <div className="max-h-screen min-h-full flex  overflow-hidden">
@@ -67,5 +77,5 @@ const setChatAndMessages = (chat: Chat) => {
       </motion.div>
       <InteractiveChat open={open} toggleSideBar={toggleSidebar} text={text} setText={setText} currentChat={currentChat} setCurrentChat={setCurrentChat}></InteractiveChat>
     </div>
-      );
+  );
 }

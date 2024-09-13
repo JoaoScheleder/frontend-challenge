@@ -44,6 +44,11 @@ export default function ChatList({onSelectedChat, selectedChat, onDelete} : {onS
         })
     }
 
+    const selectChat = (chat : Chat) =>{
+        const memory_chat = chatMemory.findById(chat.id!)!;
+        onSelectedChat(memory_chat)
+    }
+
     useEffect(()=>{
         getAllChats();
     },[chats])
@@ -56,8 +61,7 @@ export default function ChatList({onSelectedChat, selectedChat, onDelete} : {onS
             {
                 chats.map((chat, index)=>{
                     return (
-                        <div onClick={()=>{
-                            return onSelectedChat(chat)}} key={index} 
+                        <div onClick={()=>selectChat(chat)} key={index} 
                             className={(selectedChat?.id == chat.id ? 'border-l-4 border-blue-700 ' : '') + "flex justify-between items-center gap-4 dark:bg-zinc-800 bg-zinc-100 p-2 rounded cursor-pointer dark:hover:bg-zinc-800 hover:bg-zinc-100 transition"}>
                             <p className="text-sm dark:text-zinc-300 text-zinc-600">{chat.name}</p>
                             <div className="flex items-center gap-1">

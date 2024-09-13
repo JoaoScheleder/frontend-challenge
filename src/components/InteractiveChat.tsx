@@ -9,25 +9,21 @@ import { useTheme } from "@/context/themecontext";
 import { Chat, Messages } from "@/repositories/ChatRepository";
 import chatMemory from "@/repositories/ChatMemory";
 import useTranslation from "@/hooks/useTranslation";
+import geminiAIService from "@/services/GeminiAIService";
 
-export default function InteractiveChat(
-    {open, toggleSideBar, 
-    text, setText,
-        currentChat, setCurrentChat
-}: {
-        open : boolean,  toggleSideBar : () => void, 
-        text: string, setText: (value: string) => void
-        currentChat : Chat,
-        setCurrentChat : (chat: any) => void
-    }) {
+
+export default function InteractiveChat({ open, toggleSideBar, text, setText, currentChat, setCurrentChat }: {
+    open: boolean, toggleSideBar: () => void,
+    text: string, setText: (value: string) => void
+    currentChat: Chat,
+    setCurrentChat: (chat: any) => void
+}) {
     const [animationComplete, setAnimationComplete] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [fullscreen, setFullscreen] = useState(false);
 
-
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const { theme, toggleTheme } = useTheme();
-
 
     const enterFullScreen = () => {
         const elem = document.documentElement;
@@ -50,79 +46,71 @@ export default function InteractiveChat(
         }
     };
 
-    useEffect(() => {
-        console.log(currentChat);
-        if (!currentChat) {
-            setAnimationComplete(false);
-            const chats = chatMemory.findAll();
-            if (chats && chats.length > 0) {
-                setCurrentChat(chats[0]);
-                return
-            }
-            setCurrentChat({
-                name: 'Chat',
-                messages: []
-            })
+    const createChatAndSendMessage = async (message: string) => {
+        const id = chatMemory.create({
+            name: 'Novo Chat',
+            messages: []
+        });
+        const newChat = chatMemory.findById(id)!;
+        setCurrentChat(newChat);
+        await sendMessageAfterChatCreated(message);
+    }
+
+    const sendMessage = async (message: string) => {
+        if (!currentChat?.id) {
+            createChatAndSendMessage(message)
             return
         }
-        if (currentChat.id && !currentChat.messages.length) {
+        await sendMessageAfterChatCreated(message);
+    };
+    useEffect(()=>{
+        if(currentChat.messages.length === 0){
             setAnimationComplete(false);
-            sendMessage(text);
         }
-    }, [currentChat]); // Runs when currentChat changes
+        console.log(currentChat, chatMemory)
+    },[currentChat])
 
-    const sendMessage = (message: string) => {
-        if (!currentChat?.id) {
-            const id = chatMemory.create({
-                name: 'Novo Chat',
-                messages: []
-            });
-            const newChat = chatMemory.findById(id)!;
-            setCurrentChat(newChat);
-        } else {
-            // If chat already exists and no messages, send the message directly
-            sendMessageAfterChatCreated(message);
-        }
-    };
-
-    const sendMessageAfterChatCreated = (message: string) => {
+    const sendMessageAfterChatCreated = async (message: string) => {
         if (message && message.trim() !== '') {
-            const client_message: Messages = {
-                is_mine: true,
-                message: message,
-                user: "João Gabriel Scheleder",
-                createdAt: new Date().toLocaleDateString('pt-br') + ' ' + new Date().toLocaleTimeString('pt-br'),
-            };
-            const response: Messages = {
-                is_mine: false,
-                message: 'Olá, tudo bem?',
-                user: 'Robocat',
-                createdAt: new Date().toLocaleDateString('pt-br') + ' ' + new Date().toLocaleTimeString('pt-br'),
-            };
-
-            // Update currentChat state with new messages
             setCurrentChat((previous: Chat) => {
-                if (previous) {
-                    const updatedMessages = [...previous.messages, client_message, response];
-                    return { ...previous, messages: updatedMessages };
-                }
-                return {
-                    ...currentChat,
-                    messages: [client_message, response]
+                const client_message: Messages = {
+                    is_mine: true,
+                    message: message,
+                    user: "João Gabriel Scheleder",
+                    createdAt: new Date().toLocaleDateString('pt-br') + ' ' + new Date().toLocaleTimeString('pt-br'),
                 };
+                setText('');
+                const response: Messages = {
+                    is_mine: false,
+                    message: '',
+                    user: 'Robocat',
+                    createdAt: new Date().toLocaleDateString('pt-br') + ' ' + new Date().toLocaleTimeString('pt-br'),
+                };
+                const updatedMessages = [...previous.messages, client_message, response];
+                chatMemory.update({ ...previous, messages: updatedMessages });
+                return { ...previous, messages: updatedMessages };
             });
-
-            chatMemory.update({
-                ...currentChat,
-                messages: [...currentChat.messages, client_message, response]
-            })
-
-
-            // Clear input field
-            setText('');
+            geminiAIService.listenForMessages(
+                message,
+                (newMessageChunk) => {
+                    setCurrentChat((previous: Chat) => {
+                        if (previous && previous.messages.length > 0) {
+                            const updatedMessages = [...previous.messages];
+                            const lastMessage = { ...updatedMessages[updatedMessages.length - 1] };
+                            lastMessage.message += newMessageChunk;
+                            updatedMessages[updatedMessages.length - 1] = lastMessage;
+                            chatMemory.update({ ...previous, messages: updatedMessages });
+                            return { ...previous, messages: updatedMessages };
+                        }
+                        return previous;
+                    });
+                },
+                (error) => {
+                    console.error('Error receiving messages:', error);
+                }
+            );
         }
     };
-
 
 
     const startSpeechRecognition = () => {
@@ -187,8 +175,7 @@ export default function InteractiveChat(
                             if (currentChat?.messages.length !== 0) {
                                 setAnimationComplete(true);
                             }
-                        }}
-                    >
+                        }}>
                         <Robocat className="w-72 h-72" />
                         <p className="dark:text-white text-black text-sm p-4 rounded-2xl text-center dark:bg-green-600 bg-green-100">
                             {t('welcome_message')}
@@ -197,11 +184,9 @@ export default function InteractiveChat(
                 )}
                 {animationComplete && currentChat && currentChat?.messages.length > 0 && (
                     currentChat.messages.map((message: any, index) => (
-
                         <div key={index} className="flex flex-start">
                             <Message is_mine={message.is_mine} message={message.message} />
                         </div>
-
                     ))
                 )}
             </div>

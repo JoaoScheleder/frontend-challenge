@@ -2,6 +2,10 @@ import { RocketIcon } from "@radix-ui/react-icons";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { motion } from "framer-motion";
 import { Robocat } from "./robocat";
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm';
+
+import styles from './message.module.css'
 
 export default function Message({ message, is_mine = false }: Readonly<{ message: string, is_mine: boolean }>) {
     return (
@@ -34,7 +38,11 @@ export default function Message({ message, is_mine = false }: Readonly<{ message
                         {new Date().toLocaleDateString('pt-br') + ' ' + new Date().toLocaleTimeString('pt-br', { hour: '2-digit', minute: '2-digit' })}
                     </p>
                     {/* </div> */}
-                    <p className="text-base text-zinc-100">{message}</p>
+                    <div className={"text-base text-zinc-100 markdown-container" + " " + styles.reactmarkdown}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {message}
+                        </ReactMarkdown>
+                    </div>
                 </div>
             </div>
         </motion.div>
